@@ -21,7 +21,7 @@ my $pkg;
 my $pathpkg;
 my $manifest = ".MANIFEST";
 my $manifbz = "MANIFEST.bz2";
-my $manifbak = "MANIFEST.bz2.old";
+my $manifbak = ".MANIFEST.bz2.old";
 
 # backup
 if ( -e $manifbz ) {
