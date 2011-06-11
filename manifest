@@ -9,9 +9,8 @@
 
 use strict;
 use warnings;
+use File::stat;
 use IO::Compress::Bzip2 qw(bzip2 $Bzip2Error);
-
-my $VERSION = 0.1;
 
 my @dirslist = qw( a ap d f games gnome kde l locale lxde n x xap xfce );
 my $dir;
@@ -22,11 +21,26 @@ my $pathpkg;
 my $manifest = ".MANIFEST";
 my $manifbz = "MANIFEST.bz2";
 my $manifbak = ".MANIFEST.bz2.old";
+my $packagestxt = "../PACKAGES.TXT";
+my $a = stat($packagestxt);
+my $b = stat($manifbz);
 
-# backup
-if ( -e $manifbz ) {
-        rename $manifbz,$manifbak;
-        }
+# check if it is needed to run this script
+sub check {
+    if ( $a->mtime < $b->mtime ) {
+        die "No new or updated packages, MANIFEST aborting ...\n";
+        } else {
+            print "MANIFEST update necessary, processing ...\n";
+            rename $manifbz,$manifbak;
+            }
+}
+
+# check PACKAGES.TXT & MANIFEST.bz2
+if ( -e $manifbz and -e $packagestxt ) {
+    check()
+    } else {
+        print "MANIFEST processing ...\n";
+    }
 
 # list ./dir/pkgs
 foreach $dir (@dirslist) {
@@ -56,3 +70,4 @@ close(F);
 # bzip2
 bzip2 $manifest => "$manifbz" or die "bzip2 failed: $Bzip2Error\n";
 unlink("$manifest");
+
