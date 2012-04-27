@@ -45,7 +45,7 @@ if ( -e $manifbz and -e $packagestxt ) {
 # list ./dir/pkgs
 foreach $dir (@dirslist) {
     opendir(DIR, "./$dir") or die "Cannot open './$dir' : $!\n";
-    @pkgs = grep /\.txz$/, readdir(DIR);
+    @pkgs = grep /\.t[bgx]z$/, readdir(DIR);
         foreach $pkg (@pkgs) {
             $pathpkg = "./$dir/$pkg";
             push(@pkglist, $pathpkg);
@@ -61,7 +61,7 @@ foreach $pathpkg (@pkglist) {
     print F "||   Package:  ", $pathpkg, "\n";
     print F "||\n";
     print F "++========================================\n";
-    system ("tar -Jtvf $pathpkg >> $manifest");
+    system ("tar -tvf $pathpkg >> $manifest");
     print F "\n\n";
 }
 close(F);
