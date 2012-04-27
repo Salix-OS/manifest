@@ -46,7 +46,6 @@ if ( -e $manifbz and -e $packagestxt ) {
 foreach $dir (@dirslist) {
     opendir(DIR, "./$dir") or die "Cannot open './$dir' : $!\n";
     @pkgs = grep /\.txz$/, readdir(DIR);
-    @pkgs = sort @pkgs;
         foreach $pkg (@pkgs) {
             $pathpkg = "./$dir/$pkg";
             push(@pkglist, $pathpkg);
